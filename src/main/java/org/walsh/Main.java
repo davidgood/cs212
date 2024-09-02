@@ -1,106 +1,46 @@
 package org.walsh;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 
-class Main {
+public class Main {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        ArrayList<Student> students = new ArrayList<>();
+        ArrayList<Assignment> assignments = new ArrayList<>();
 
-        // Step 1: Input and store grades
-        System.out.print("Enter the number of students: ");
-        int numStudents = scanner.nextInt();
-        int[] grades = new int[numStudents];
+        // Read grades from a CSV file
+        String csvFile = "students.csv";
+        String line;
+        String csvSplitBy = ",";
 
-        for (int i = 0; i < numStudents; i++) {
-            System.out.print("Enter grade for student " + (i + 1) + ": ");
-            grades[i] = scanner.nextInt();
-            while (grades[i] < 0 || grades[i] > 100) {
-                System.out.println("Please enter a valid grade between 0 and 100.");
-                System.out.print("Enter grade for student " + (i + 1) + ": ");
-                grades[i] = scanner.nextInt();
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            // Read header line to extract assignment names
+            // TODO
+
+            // Read each student's grades
+            while ((line = br.readLine()) != null) {
+                // TODO
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        // Step 2: Calculate average grade
-        double average = calculateAverage(grades);
-        System.out.println("\nAverage grade: " + average);
+        // Calculate and display the average grade for each assignment
+        // TODO
 
-        // Step 3: Find highest and lowest grades
-        int highest = findHighestGrade(grades);
-        int lowest = findLowestGrade(grades);
-        System.out.println("Highest grade: " + highest);
-        System.out.println("Lowest grade: " + lowest);
+        // Simulate API interaction
+        // TODO
 
-        // Step 4: Sort the grades
-        sortGrades(grades);
-        System.out.print("Grades sorted: ");
-        for (int grade : grades) {
-            System.out.print(grade + " ");
-        }
-        System.out.println();
+        // Sort students by average grade and display the sorted list
+        // TODO
+
     }
 
-    // Method to calculate the average grade
-    public static double calculateAverage(int[] grades) {
-        int sum = 0;
-        for (int grade : grades) {
-            sum += grade;
-        }
-        return (double) sum / grades.length;
-    }
-
-    // Method to find the highest grade
-    public static int findHighestGrade(int[] grades) {
-        int highest = grades[0];
-        for (int grade : grades) {
-            if (grade > highest) {
-                highest = grade;
-            }
-        }
-        return highest;
-    }
-
-    public static int findHighestGradeStreams(int[] grades) {
-        var max = Arrays.stream(grades).max();
-        return max.isPresent() ? max.getAsInt() : 100;
-    }
-
-    // Method to find the lowest grade
-    public static int findLowestGrade(int[] grades) {
-        int lowest = grades[0];
-        for (int grade : grades) {
-            if (grade < lowest) {
-                lowest = grade;
-            }
-        }
-        return lowest;
-    }
-
-    public static int findLowestGradeStreams(int[] grades) {
-        var min = Arrays.stream(grades).max();
-        return min.isPresent() ? min.getAsInt() : 0;
-    }
-
-    // Method to sort the grades using bubble sort algorithm
-    public static void sortGrades(int[] grades) {
-        boolean swapped;
-        do {
-            swapped = false;
-            for (int i = 0; i < grades.length - 1; i++) {
-                if (grades[i] > grades[i + 1]) {
-                    // Swap grades[i] and grades[i + 1]
-                    int temp = grades[i];
-                    grades[i] = grades[i + 1];
-                    grades[i + 1] = temp;
-                    swapped = true;
-                }
-            }
-        } while (swapped);
-    }
-
-    public static void sortGradesStreaming(int[] grades) {
-        Arrays.sort(grades);
+    public static double calculateAverageGrade(ArrayList<Student> students, Assignment assignment) {
+        // TODO
     }
 }
