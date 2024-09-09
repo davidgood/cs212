@@ -22,18 +22,34 @@ public class Student {
     }
 
     public void addGrade(Assignment assignment, int grade) {
-        // TODO
+        this.grades.add(new Grade(assignment, grade));
     }
 
     public Integer getGrade(Assignment assignment) {
-        // TODO
+        for (Grade grade : grades) {
+            if (grade.getAssignment().equals(assignment)) {
+                return grade.getGrade();
+            }
+        }
+        return null;
     }
 
     public double calculateAverageGrade() {
-        // TODO
+        if (grades.isEmpty()) return 0;
+        double total = 0;
+        for (Grade grade : grades) {
+            total += grade.getGrade();
+        }
+        return total / grades.size();
     }
 
     public void simulateAPIPost() {
-        // TODO
+        System.out.println("Posting student data to external system:");
+        System.out.println("Student Name: " + name);
+        System.out.println("Student ID: " + id);
+        for (Grade grade : grades) {
+            System.out.println("Assignment: " + grade.getAssignment().getName() +
+                    ", Grade: " + grade.getGrade());
+        }
     }
 }
