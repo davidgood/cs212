@@ -56,11 +56,13 @@ public class StudentTests {
         student.addGrade(assignment1, 85);
         student.addGrade(assignment2, 90);
 
-        String expectedOutput = "Posting student data to external system:\n" +
-                "Student Name: John Doe\n" +
-                "Student ID: S001\n" +
-                "Assignment: Assignment 1, Grade: 85\n" +
-                "Assignment: Assignment 2, Grade: 90\n";
+        String expectedOutput = """
+                Posting student data to external system:
+                Student Name: John Doe
+                Student ID: S001
+                Assignment: Assignment 1, Grade: 85
+                Assignment: Assignment 2, Grade: 90
+                """;
 
         // Capture the output to verify it matches the expected output
         java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();

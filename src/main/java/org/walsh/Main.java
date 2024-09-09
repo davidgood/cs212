@@ -62,7 +62,6 @@ public class Main {
             System.out.println(student.getName() + ": " + student.calculateAverageGrade());
             System.out.print('\r');
             String[] x = new String[students.size()];
-            int i = x.length - 1;
         }
     }
 
