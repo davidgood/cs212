@@ -1,4 +1,4 @@
-package org.walsh;
+package org.walsh.hw2;
 
 public class Assignment {
     private final String name;
