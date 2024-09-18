@@ -4,39 +4,54 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Student extends Person {
-    private final Map<IGradeable, Grade> grades;
+    private final Map<IGradable, Grade> _grades;
 
     public Student(String name, String id) {
         super(name, id);
-        this.grades = new HashMap<>();
+        _grades = new HashMap<>();
     }
 
-    public void addGrade(IGradeable gradable, int grade) {
-        this.grades.put(gradable, new Grade(grade));
+    // --- Don't change anything above this line ---
+    // v--- TODO - fix the rest of this class ---v
+
+
+    public String getName() {
+        return name;
     }
 
-    public Integer getGrade(IGradeable gradable) {
-        Grade grade = this.grades.get(gradable);
-        return grade != null ? grade.getPoints() : null;
+    public String getId() {
+        return id;
+    }
+
+    public void addGrade(Assignment assignment, int grade) {
+        _grades.add(new Grade(assignment, grade));
+    }
+
+    public Integer getGrade(Assignment assignment) {
+        for (Grade grade : _grades) {
+            if (grade.getAssignment().equals(assignment)) {
+                return grade.getGrade();
+            }
+        }
+        return null;
     }
 
     public double calculateAverageGrade() {
-        if (grades.isEmpty()) return 0;
+        if (_grades.isEmpty()) return 0;
         double total = 0;
-        for (Grade grade : grades.values()) {
-            total += grade.getPoints();
+        for (Grade grade : _grades) {
+            total += grade.getGrade();
         }
-        return total / grades.size();
+        return total / _grades.size();
     }
 
-    @Override
     public void simulateAPIPost() {
         System.out.println("Posting student data to external system:");
-        System.out.println("Student Name: " + getName());
-        System.out.println("Student ID: " + getId());
-        for (Map.Entry<IGradeable, Grade> entry : grades.entrySet()) {
-            System.out.println("Assignment: " + entry.getKey().getName() +
-                    ", Grade: " + entry.getValue().getPoints());
+        System.out.println("Student Name: " + name);
+        System.out.println("Student ID: " + id);
+        for (Grade grade : _grades) {
+            System.out.println("Assignment: " + grade.getAssignment().getName() +
+                    ", Grade: " + grade.getGrade());
         }
     }
 }

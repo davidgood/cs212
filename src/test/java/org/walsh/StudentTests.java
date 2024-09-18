@@ -19,8 +19,8 @@ public class StudentTests {
         assignment2 = mock(Assignment.class);
 
         // Mock the assignments
-        when(assignment1.get_name()).thenReturn("Assignment 1");
-        when(assignment2.get_name()).thenReturn("Assignment 2");
+        when(assignment1.getName()).thenReturn("Assignment 1");
+        when(assignment2.getName()).thenReturn("Assignment 2");
     }
 
     @Test

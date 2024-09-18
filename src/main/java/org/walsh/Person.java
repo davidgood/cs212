@@ -1,20 +1,20 @@
 package org.walsh;
 
 public abstract class Person {
-    private final String name;
-    private final String id;
+    private final String _name;
+    private final String _id;
 
     public Person(String name, String id) {
-        this.name = name;
-        this.id = id;
+        _name = name;
+        _id = id;
     }
 
     public String getName() {
-        return name;
+        return _name;
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
 
     public abstract void simulateAPIPost();
