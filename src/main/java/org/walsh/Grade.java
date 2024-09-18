@@ -1,19 +1,13 @@
 package org.walsh;
 
 public class Grade {
-    private final Assignment assignment;
-    private final int grade;
+    private final int points;
 
-    public Grade(Assignment assignment, int grade) {
-        this.assignment = assignment;
-        this.grade = grade;
+    public Grade(int points) {
+        this.points = points;
     }
 
-    public Assignment getAssignment() {
-        return assignment;
-    }
-
-    public int getGrade() {
-        return grade;
+    public int getPoints() {
+        return points;
     }
 }

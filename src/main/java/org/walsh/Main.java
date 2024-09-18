@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class Main {
+    private static int _ID = 0;
+
 
     public static void main(String[] args) {
         ArrayList<Student> students = new ArrayList<>();
@@ -21,60 +22,47 @@ public class Main {
             // Read header line to extract assignment names
             if ((line = br.readLine()) != null) {
                 String[] headers = line.split(csvSplitBy);
-                for (int i = 1; i < headers.length; i++) { // Skip the first column which is student name
+                for (int i = 2; i < headers.length; i++) { // Start at index 2 to skip Name and Type columns
                     assignments.add(new Assignment(headers[i], 100, "2024-09-30")); // Assign a dummy due date
                 }
             }
 
             // Read each student's grades
             while ((line = br.readLine()) != null) {
-                String[] values = line.split(csvSplitBy);
-                String studentName = values[0];
-                String studentId = "S" + (students.size() + 1);
+                String[] row = line.split(csvSplitBy);
+                Student student = getStudent(row);
 
-                Student student = new Student(studentName, studentId);
-                students.add(student);
-
-                for (int i = 1; i < values.length; i++) { // Skip the first column which is student name
-                    int grade = Integer.parseInt(values[i]);
-                    student.addGrade(assignments.get(i - 1), grade);
+                // Add the student's grades
+                for (int i = 2; i < row.length; i++) {
+                    student.addGrade(assignments.get(i - 2), Integer.parseInt(row[i])); // Grades start at index 2
                 }
+
+                students.add(student);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Calculate and display the average grade for each assignment
-        for (Assignment assignment : assignments) {
-            double averageGrade = calculateAverageGrade(students, assignment);
-            System.out.println("Average grade for " + assignment.getName() + ": " + averageGrade);
-        }
-
-        // Simulate API interaction
+        // Simulate posting to an external API
         for (Student student : students) {
             student.simulateAPIPost();
         }
-
-        // Sort students by average grade and display the sorted list
-        students.sort(Comparator.comparingDouble(Student::calculateAverageGrade));
-        System.out.println("Students sorted by average grade:");
-        for (Student student : students) {
-            System.out.println(student.getName() + ": " + student.calculateAverageGrade());
-            System.out.print('\r');
-            String[] x = new String[students.size()];
-        }
     }
 
-    public static double calculateAverageGrade(ArrayList<Student> students, Assignment assignment) {
-        double total = 0;
-        int count = 0;
-        for (Student student : students) {
-            Integer grade = student.getGrade(assignment);
-            if (grade != null) {
-                total += grade;
-                count++;
-            }
+    private static Student getStudent(String[] row) {;
+        String studentName = row[0];
+        String studentType = row[1];
+
+        // Create student based on type
+        Student student;
+        if (studentType.equalsIgnoreCase("Online")) {
+            OnlineStudent onlineStudent = new OnlineStudent(studentName, "S" + ++_ID);
+            onlineStudent.incrementForumPosts(); // Simulate some forum posts for this online student
+            onlineStudent.completeVideoLecture(); // Simulate some video lectures completed
+            student = onlineStudent;
+        } else {
+            student = new Student(studentName, "S" + ++_ID);
         }
-        return count > 0 ? total / count : 0;
+        return student;
     }
 }

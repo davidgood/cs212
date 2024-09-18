@@ -1,11 +1,16 @@
-Student Name,Assignment 1,Assignment 2,Assignment 3
-Alice,85,90,78
-Bob,75,82,88
-Charlie,92,87,94
-Eric,88,91,85
-Eva,79,80,82
-Frank,83,85,89
-Grace,91,94,93
-Hannah,76,78,80
-Ivan,85,88,86
-Julia,89,84,87
+Name,Type,Assignment1,Assignment2,Assignment3
+John Doe,Regular,85,90,88
+Jane Smith,Online,80,88,90
+Emily Johnson,Regular,90,85,92
+Michael Brown,Online,88,92,91
+Olivia Davis,Regular,95,94,87
+Daniel Wilson,Online,70,78,80
+Sophia Martinez,Regular,82,80,83
+James Garcia,Online,76,82,79
+Lily Rodriguez,Regular,89,87,84
+Ethan Hernandez,Online,92,91,89
+Ava Lee,Regular,85,83,86
+Mason White,Online,87,85,88
+Ella Hall,Regular,91,88,90
+Lucas Adams,Online,79,81,85
+Charlotte Thompson,Regular,93,92,94
