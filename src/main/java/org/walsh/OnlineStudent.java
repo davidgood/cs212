@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OnlineStudent extends Student {
-    private final int _forumPosts;
-    private final int _videoLecturesCompleted;
-    private final Map<IGradable, Boolean> _assignmentTimeliness; // Track if each assignment was submitted on time
+    private int _forumPosts;
+    private int _videoLecturesCompleted;
+    private Map<IGradable, Boolean> _assignmentTimeliness; // Track if each assignment was submitted on time
 
     public OnlineStudent(String name, String id) {
         super(name, id);
@@ -17,33 +17,32 @@ public class OnlineStudent extends Student {
 
     // Methods for tracking forum participation
     public void incrementForumPosts() {
-        // TODO
+        _forumPosts++;
     }
 
-    public int getForumPosts() {
-        // TODO
+    public int get_forumPosts() {
+        return _forumPosts;
     }
 
     // Methods for tracking video lecture completion
     public void completeVideoLecture() {
-        // TODO
+        _videoLecturesCompleted++;
     }
 
-    public int getVideoLecturesCompleted() {
-        // TODO
+    public int get_videoLecturesCompleted() {
+        return _videoLecturesCompleted;
     }
 
     // Methods for tracking assignment submission timeliness
     public void submitAssignment(IGradable gradable, int points, boolean onTime) {
-        // TODO
+        addGrade(gradable, points);
+        _assignmentTimeliness.put(gradable, onTime);
     }
 
     public boolean wasAssignmentSubmittedOnTime(IGradable gradable) {
-        // TODO
+        return _assignmentTimeliness.getOrDefault(gradable, false);
     }
 
-
-    // DO NOT MODIFY THIS METHOD:
     @Override
     public void simulateAPIPost() {
         super.simulateAPIPost();

@@ -1,25 +1,28 @@
 package org.walsh;
 
-public class Assignment {
-    private final String name;
-    private final int maxPoints;
-    private final String dueDate;
+public class Assignment implements IGradable {
+    private final String _name;
+    private final int _maxPoints;
+    private final String _dueDate;
 
     public Assignment(String name, int maxPoints, String dueDate) {
-        this.name = name;
-        this.maxPoints = maxPoints;
-        this.dueDate = dueDate;
+        _name = name;
+        _maxPoints = maxPoints;
+        _dueDate = dueDate;
     }
 
+    @Override
     public String getName() {
-        return name;
+        return _name;
     }
 
+    @Override
     public int getMaxPoints() {
-        return maxPoints;
+        return _maxPoints;
     }
 
+    @Override
     public String getDueDate() {
-        return dueDate;
+        return _dueDate;
     }
 }

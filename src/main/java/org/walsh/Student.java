@@ -11,47 +11,32 @@ public class Student extends Person {
         _grades = new HashMap<>();
     }
 
-    // --- Don't change anything above this line ---
-    // v--- TODO - fix the rest of this class ---v
-
-
-    public String getName() {
-        return name;
+    public void addGrade(IGradable gradable, int grade) {
+        _grades.put(gradable, new Grade(grade));
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void addGrade(Assignment assignment, int grade) {
-        _grades.add(new Grade(assignment, grade));
-    }
-
-    public Integer getGrade(Assignment assignment) {
-        for (Grade grade : _grades) {
-            if (grade.getAssignment().equals(assignment)) {
-                return grade.getGrade();
-            }
-        }
-        return null;
+    public Integer getGrade(IGradable gradable) {
+        var grade = _grades.get(gradable);
+        return grade != null ? grade.getPoints() : null;
     }
 
     public double calculateAverageGrade() {
         if (_grades.isEmpty()) return 0;
         double total = 0;
-        for (Grade grade : _grades) {
-            total += grade.getGrade();
+        for (Grade grade : _grades.values()) {
+            total += grade.getPoints();
         }
         return total / _grades.size();
     }
 
+    @Override
     public void simulateAPIPost() {
         System.out.println("Posting student data to external system:");
-        System.out.println("Student Name: " + name);
-        System.out.println("Student ID: " + id);
-        for (Grade grade : _grades) {
-            System.out.println("Assignment: " + grade.getAssignment().getName() +
-                    ", Grade: " + grade.getGrade());
+        System.out.println("Student Name: " + getName());
+        System.out.println("Student ID: " + getId());
+        for (Map.Entry<IGradable, Grade> entry : _grades.entrySet()) {
+            System.out.println("Assignment: " + entry.getKey().getName() +
+                    ", Grade: " + entry.getValue().getPoints());
         }
     }
 }
