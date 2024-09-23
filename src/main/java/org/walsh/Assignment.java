@@ -6,11 +6,11 @@ public class Assignment implements IGradable {
     private final String _dueDate;
     private AssignmentType _type;
 
-    public Assignment(String name, int maxPoints, String dueDate, AssignmentType type) {
+    public Assignment(String name, int maxPoints, String dueDate) {
         _name = name;
         _maxPoints = maxPoints;
         _dueDate = dueDate;
-        _type = type;
+        // TODO - fix this constructor
     }
 
     @Override
@@ -28,11 +28,7 @@ public class Assignment implements IGradable {
         return _dueDate;
     }
 
-    public AssignmentType getType() {
-        return _type;
-    }
+    // TODO - need a way to get assignment type
 
-    public void setType(AssignmentType type) {
-        _type = type;
-    }
+    // TODO - need a way to set assignment type
 }

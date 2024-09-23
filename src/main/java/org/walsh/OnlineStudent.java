@@ -5,7 +5,8 @@ public class OnlineStudent extends Student {
     private int _videoLecturesCompleted;
 
     public OnlineStudent(String name, String id) {
-        super(name, id, StudentType.ONLINE);  // Use enum to specify student type
+        // TODO - something needs fixed here.
+        super(name, id);
         _forumPosts = 0;
         _videoLecturesCompleted = 0;
     }

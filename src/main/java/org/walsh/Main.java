@@ -6,11 +6,11 @@ public class Main {
 
     public static void main(String[] args) {
         // Reading CSV data
-        CSVReader csvReader = new CSVReader("students.csv");
+        var csvReader = new CSVReader("students.csv");
         ArrayList<String[]> csvData = csvReader.readData();
 
         // Parsing student data
-        StudentParser studentParser = new StudentParser();
+        var studentParser = new StudentParser();
         ArrayList<Student> students = studentParser.parseStudents(csvData);
 
         // Simulate API post for each student
