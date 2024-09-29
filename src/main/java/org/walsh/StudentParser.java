@@ -9,9 +9,6 @@ public class StudentParser {
     private ArrayList<Assignment> assignments = new ArrayList<>(); // Store assignments here
 
     public StudentParser() {
-        // This code parses each assignment type that's in the AssignmentType enum and
-        // puts it into a hashmap as the key and creates a new ArrayList<> as the value
-        // to hold the actual assignments when you're parsing the csvData.
         for (AssignmentType type : AssignmentType.values()) {
             assignmentMap.put(type, new ArrayList<>()); // Initialize each assignment type
         }
@@ -19,12 +16,54 @@ public class StudentParser {
 
     public ArrayList<Student> parseStudents(ArrayList<String[]> csvData) {
         ArrayList<Student> students = new ArrayList<>();
+        int _ID = 0;
 
-        // TODO - parse the data you get from CSVReader.
-        // i.e. every element of csvData should be one line of the .csv file and
-        // be an array of Strings that represent each column of the .csv file.
+        // Parse header row (assignment names only)
+        String[] headerRow = csvData.get(0); // The first row is the header
+        for (int i = 2; i < headerRow.length - 1; i += 2) {
+            String assignmentName = headerRow[i]; // Only store the assignment name
+            assignments.add(new Assignment(assignmentName, 100, "2024-09-30", null)); // We’ll set type later
+        }
+
+        // Parse student data (remaining rows)
+        for (int rowIndex = 1; rowIndex < csvData.size(); rowIndex++) {
+            String[] row = csvData.get(rowIndex);
+            String name = row[0];
+            StudentType studentType = StudentType.valueOf(row[1].toUpperCase());
+            Student student = creatStudent(studentType, name, ++_ID, row);
+
+            getAssignments(row, student);
+
+            students.add(student);
+        }
 
         return students;
     }
 
+    private Student creatStudent(StudentType studentType, String name, int _ID, String[] row) {
+        if (studentType == StudentType.PARTTIME) {
+            int hoursWorked = Integer.parseInt(row[row.length - 1]); // Last column is hours worked
+            return new PartTimeStudent(name, "ID_" + _ID, hoursWorked);
+        } else if (studentType == StudentType.ONLINE) {
+            return new OnlineStudent(name, "ID_" + _ID);
+        } else {
+            return new Student(name, "ID_" + _ID, StudentType.FULLTIME);
+        }
+    }
+
+    private void getAssignments(String[] row, Student student) {
+        // Assign grades and assignment types to the student
+        for (int i = 2; i < row.length - 1; i += 2) {
+            int grade = Integer.parseInt(row[i]);
+            AssignmentType type = AssignmentType.valueOf(row[i + 1].toUpperCase()); // Now parse assignment type from data row
+            Assignment assignment = assignments.get((i - 2) / 2); // Get corresponding assignment
+            assignment.setType(type); // Set the type in the assignment
+            student.addGrade(assignment, grade); // Assign grade to the student
+            assignmentMap.get(type).add(assignment); // Add assignment to assignmentMap
+        }
+    }
+
+    public HashMap<AssignmentType, ArrayList<Assignment>> getAssignmentMap() {
+        return assignmentMap;
+    }
 }

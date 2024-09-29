@@ -4,15 +4,17 @@ public class PartTimeStudent extends Student {
     private int _hoursWorkedPerWeek;
 
     public PartTimeStudent(String name, String id, int hoursWorkedPerWeek) {
-        // TODO - fill this constructor in.
+        super(name, id, StudentType.PARTTIME);  // Use enum to specify student type
+        _hoursWorkedPerWeek = hoursWorkedPerWeek;
     }
 
-    // TODO - get hours worked method
+    public double calculateWorkload() {
+        return _hoursWorkedPerWeek + calculateAverageGrade();
+    }
 
     @Override
     public void simulateAPIPost() {
-
-        // TODO - fill this method in
-
+        super.simulateAPIPost();
+        System.out.println("Hours Worked Per Week: " + _hoursWorkedPerWeek);
     }
 }
