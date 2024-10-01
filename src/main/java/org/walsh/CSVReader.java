@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CSVReader {
-    private String csvFile;
+    private final String _csvFile;
 
     public CSVReader(String csvFile) {
-        this.csvFile = csvFile;
+        this._csvFile = csvFile;
     }
 
     public ArrayList<String[]> readData() {
@@ -17,7 +17,8 @@ public class CSVReader {
         String line;
         String csvSplitBy = ",";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+        // Read everything, including header row:
+        try (BufferedReader br = new BufferedReader(new FileReader(_csvFile))) {
             while ((line = br.readLine()) != null) {
                 String[] row = line.split(csvSplitBy);
                 data.add(row);

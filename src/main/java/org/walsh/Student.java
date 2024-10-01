@@ -45,6 +45,6 @@ public class Student extends Person {
             System.out.println("Assignment: " + entry.getKey().getName() +
                     ", Grade: " + entry.getValue().getPoints());
         }
-        System.out.println("Average Grade: " + calculateAverageGrade() + "\n");
+        System.out.println("Average Grade: " + calculateAverageGrade());
     }
 }

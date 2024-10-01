@@ -16,5 +16,6 @@ public class PartTimeStudent extends Student {
     public void simulateAPIPost() {
         super.simulateAPIPost();
         System.out.println("Hours Worked Per Week: " + _hoursWorkedPerWeek);
+        System.out.println("Workload: " + calculateWorkload());
     }
 }

@@ -16,6 +16,7 @@ public class Main {
         // Simulate API post for each student
         for (Student student : students) {
             student.simulateAPIPost();
+            System.out.println("\n");
         }
     }
 }
