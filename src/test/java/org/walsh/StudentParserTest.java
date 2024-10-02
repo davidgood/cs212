@@ -11,6 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 class StudentParserTest {
 
     @Mock
@@ -53,7 +54,7 @@ class StudentParserTest {
         Student partTimeStudent = students.get(1);
         assertEquals("David King", partTimeStudent.getName());
         assertEquals(StudentType.PARTTIME, partTimeStudent.getStudentType());
-        assertTrue(partTimeStudent instanceof PartTimeStudent);
+        assertInstanceOf(PartTimeStudent.class, partTimeStudent);
         assertEquals(11, ((PartTimeStudent) partTimeStudent).getHoursWorked());
         assertEquals(73, partTimeStudent.getGrade(new Assignment("Assignment1", 100, "2024-09-30", AssignmentType.PROJECT)));
         assertEquals(93, partTimeStudent.getGrade(new Assignment("Assignment2", 100, "2024-09-30", AssignmentType.QUIZ)));
@@ -62,7 +63,7 @@ class StudentParserTest {
         Student onlineStudent = students.get(2);
         assertEquals("Sophia Martinez", onlineStudent.getName());
         assertEquals(StudentType.ONLINE, onlineStudent.getStudentType());
-        assertTrue(onlineStudent instanceof OnlineStudent);
+        assertInstanceOf(OnlineStudent.class, onlineStudent);
         assertEquals(72, onlineStudent.getGrade(new Assignment("Assignment1", 100, "2024-09-30", AssignmentType.QUIZ)));
         assertEquals(82, onlineStudent.getGrade(new Assignment("Assignment2", 100, "2024-09-30", AssignmentType.HOMEWORK)));
 
