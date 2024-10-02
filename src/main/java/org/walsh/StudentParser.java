@@ -17,6 +17,11 @@ public class StudentParser {
 
     public ArrayList<Student> parseStudents(ArrayList<String[]> csvData) {
         ArrayList<Student> students = new ArrayList<>();
+
+        if (csvData == null || csvData.isEmpty()) {
+            return students;
+        }
+
         int _ID = 0;
 
         // Parse header row (assignment names only)
@@ -26,8 +31,17 @@ public class StudentParser {
         for (int rowIndex = 1; rowIndex < csvData.size(); rowIndex++) {
             String[] row = csvData.get(rowIndex);
             var name = row[0];
-            var studentType = StudentType.valueOf(row[1].toUpperCase());
-            var student = creatStudent(studentType, name, ++_ID, row); //pre-increment ID so it's not Zero
+            StudentType studentType;
+
+            try {
+                studentType = StudentType.valueOf(row[1].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                // Handle the invalid student type case
+                System.err.println("Invalid student type for student: " + name + ". Skipping this entry.");
+                continue; // Skip this invalid row
+            }
+
+            var student = createStudent(studentType, name, ++_ID, row); //pre-increment ID so it's not Zero
 
             getAssignments(row, student);
 
@@ -45,7 +59,7 @@ public class StudentParser {
         }
     }
 
-    private Student creatStudent(StudentType studentType, String name, int _ID, String[] row) {
+    private Student createStudent(StudentType studentType, String name, int _ID, String[] row) {
         if (studentType == StudentType.PARTTIME) {
             int hoursWorked = Integer.parseInt(row[row.length - 1]); // Last column is hours worked
             return new PartTimeStudent(name, "ID_" + _ID, hoursWorked);
@@ -58,13 +72,29 @@ public class StudentParser {
         }
     }
 
-    private void getAssignments(String[] row, Student student) {
+/*    private void getAssignments(String[] row, Student student) {
         // Assign grades and assignment types to the student
         for (int i = 2; i < row.length - 1; i += 2) {
             int grade = Integer.parseInt(row[i]);
             AssignmentType type = AssignmentType.valueOf(row[i + 1].toUpperCase()); // Now parse assignment type from data row
             Assignment assignment = _assignments.get((i - 2) / 2); // Get corresponding assignment
             assignment.setType(type); // Set the type in the assignment
+            student.addGrade(assignment, grade); // Assign grade to the student
+            _assignmentMap.get(type).add(assignment); // Add assignment to assignmentMap
+        }
+    }*/
+
+    private void getAssignments(String[] row, Student student) {
+        // Assign grades and assignment types to the student
+        for (int i = 2; i < row.length - 1; i += 2) {
+            int grade = Integer.parseInt(row[i]);
+            AssignmentType type = AssignmentType.valueOf(row[i + 1].toUpperCase()); // Now parse assignment type from data row
+            Assignment originalAssignment = _assignments.get((i - 2) / 2); // Get corresponding assignment
+
+            // Clone the assignment to avoid modifying the original
+            Assignment assignment = new Assignment(originalAssignment.getName(), originalAssignment.getMaxPoints(),
+                    originalAssignment.getDueDate(), type);
+
             student.addGrade(assignment, grade); // Assign grade to the student
             _assignmentMap.get(type).add(assignment); // Add assignment to assignmentMap
         }

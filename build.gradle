@@ -15,15 +15,19 @@ apply plugin: 'java'                              // standard Java tasks
 apply plugin: 'idea'  // App Engine tasks
 
 dependencies {
+    // JUnit 5 API for writing tests (compile-time dependency)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.1'
 
-    // Add your dependencies here.
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.11.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.1' // Add this line
+    // JUnit 5 Engine for running the tests (runtime dependency)
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.1'
 
-    // https://mvnrepository.com/artifact/org.mockito/mockito-core
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.1'
+    // Mockito or other test-related libraries, if necessary
+    testImplementation 'org.mockito:mockito-core:5.14.1'
 
+}
+
+tasks.withType(Test).configureEach {
+    jvmArgs = ['-Xbootclasspath/a:/path/to/some/class']
 }
 
 test {

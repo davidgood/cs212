@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Student extends Person {
-    private final Map<IGradable, Grade> _grades;
+    private final HashMap<IGradable, Grade> _grades;
     private final StudentType _studentType;  // New field for student type
 
     public Student(String name, String id, StudentType studentType) {
