@@ -20,7 +20,7 @@ public class StudentParser {
         int _ID = 0;
 
         // Parse header row (assignment names only)
-        parseHeaderRow(csvData.getFirst());
+        parseHeaderRow(csvData.get(0));
 
         // Parse student data (remaining rows)
         for (int rowIndex = 1; rowIndex < csvData.size(); rowIndex++) {

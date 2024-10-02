@@ -12,6 +12,10 @@ public class PartTimeStudent extends Student {
         return _hoursWorkedPerWeek + calculateAverageGrade();
     }
 
+    public double getHoursWorked() {
+        return _hoursWorkedPerWeek;
+    }
+
     @Override
     public void simulateAPIPost() {
         super.simulateAPIPost();
