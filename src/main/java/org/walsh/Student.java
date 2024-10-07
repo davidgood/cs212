@@ -1,5 +1,13 @@
 package org.walsh;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,16 +43,52 @@ public class Student extends Person {
         return total / _grades.size();
     }
 
-    @Override
-    public void simulateAPIPost() {
-        System.out.println("Posting student data to external system:");
-        System.out.println("Student Name: " + getName());
-        System.out.println("Student ID: " + getId());
-        System.out.println("Student Type: " + getStudentType());  // Show the student type
-        for (Map.Entry<IGradable, Grade> entry : _grades.entrySet()) {
-            System.out.println("Assignment: " + entry.getKey().getName() +
-                    ", Grade: " + entry.getValue().getPoints());
+
+    public void generateJson() {
+            var mapper = new ObjectMapper();
+
+            // Create a root JSON object
+            var rootNode = mapper.createObjectNode();
+
+            // Add student data
+            rootNode.put("studentName", getName());
+            rootNode.put("studentId", getId());
+            rootNode.put("studentType", getStudentType().toString());
+
+            var grades = mapper.createObjectNode();
+            for (Map.Entry<IGradable, Grade> entry : _grades.entrySet()) {
+                grades.put(entry.getKey().getName(), entry.getValue().getPoints());
+            }
+            rootNode.set("grades", grades);
+
+        try {
+            // Convert the mapper to a JSON string
+            JSON_PAYLOAD = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
-        System.out.println("Average Grade: " + calculateAverageGrade());
+    }
+
+    @Override
+    public void simulateAPIPost(){
+        generateJson();
+        var client = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_2)
+                .connectTimeout(Duration.ofSeconds(10))
+                .build();
+
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(JSON_PAYLOAD))
+                .build();
+
+        try {
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Status code: " + response.statusCode());
+            System.out.println("Response body: " + response.body());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
