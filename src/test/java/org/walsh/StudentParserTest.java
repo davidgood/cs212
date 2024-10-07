@@ -21,11 +21,16 @@ class StudentParserTest {
     private CSVReader csvReader;
 
     private StudentParser studentParser;
+    private Assignment _assignment1;
+    private Assignment _assignment2;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         studentParser = new StudentParser();
+
+        _assignment1 = new Assignment("Assignment1", 100, "2024-09-30", AssignmentType.EXAM);
+        _assignment2 = new Assignment("Assignment2", 100, "2024-09-30", AssignmentType.QUIZ);
     }
 
     @Test
@@ -40,31 +45,35 @@ class StudentParserTest {
         List<Student> students = studentParser.parseStudents(csvReader.readData());
 
         // Assertions
-        assertEquals(3, students.size());
+        assertThat(students.size()).isEqualTo(3);
 
         // Test FullTime student
-        Student fullTimeStudent = students.get(0);
+        var fullTimeStudent = students.get(0);
         assertThat(fullTimeStudent.getName()).isEqualTo("Owen Moore");
-        assertEquals(StudentType.FULLTIME, fullTimeStudent.getStudentType());
-        assertEquals(99, fullTimeStudent.getGrade(new Assignment("Assignment1", 100, "2024-09-30", AssignmentType.EXAM)));
-        assertEquals(84, fullTimeStudent.getGrade(new Assignment("Assignment2", 100, "2024-09-30", AssignmentType.QUIZ)));
+        assertThat(fullTimeStudent.getStudentType()).isEqualTo(StudentType.FULLTIME);
+        assertThat(fullTimeStudent.getGrade(_assignment1)).isEqualTo(99);
+        assertThat(fullTimeStudent.getGrade(_assignment2)).isEqualTo(84);
 
         // Test PartTime student
-        Student partTimeStudent = students.get(1);
-        assertEquals("David King", partTimeStudent.getName());
-        assertEquals(StudentType.PARTTIME, partTimeStudent.getStudentType());
-        assertInstanceOf(PartTimeStudent.class, partTimeStudent);
-        assertEquals(11, ((PartTimeStudent) partTimeStudent).getHoursWorked());
-        assertEquals(73, partTimeStudent.getGrade(new Assignment("Assignment1", 100, "2024-09-30", AssignmentType.PROJECT)));
-        assertEquals(93, partTimeStudent.getGrade(new Assignment("Assignment2", 100, "2024-09-30", AssignmentType.QUIZ)));
+        var partTimeStudent = students.get(1);
+        assertThat(partTimeStudent.getName()).isEqualTo("David King");
+        assertThat(partTimeStudent.getStudentType()).isEqualTo(StudentType.PARTTIME);
+        assertThat(partTimeStudent).isInstanceOf(PartTimeStudent.class);
+        assertThat(((PartTimeStudent) partTimeStudent).getHoursWorked()).isEqualTo(11);
+        _assignment1.setType(AssignmentType.PROJECT);
+        _assignment2.setType(AssignmentType.QUIZ);
+        assertThat(partTimeStudent.getGrade(_assignment1)).isEqualTo(73);
+        assertThat(partTimeStudent.getGrade(_assignment2)).isEqualTo(93);
 
         // Test Online student
-        Student onlineStudent = students.get(2);
-        assertEquals("Sophia Martinez", onlineStudent.getName());
-        assertEquals(StudentType.ONLINE, onlineStudent.getStudentType());
-        assertInstanceOf(OnlineStudent.class, onlineStudent);
-        assertEquals(72, onlineStudent.getGrade(new Assignment("Assignment1", 100, "2024-09-30", AssignmentType.QUIZ)));
-        assertEquals(82, onlineStudent.getGrade(new Assignment("Assignment2", 100, "2024-09-30", AssignmentType.HOMEWORK)));
+        var onlineStudent = students.get(2);
+        assertThat(onlineStudent.getName()).isEqualTo("Sophia Martinez");
+        assertThat(onlineStudent.getStudentType()).isEqualTo(StudentType.ONLINE);
+        assertThat(onlineStudent).isInstanceOf(OnlineStudent.class);
+        _assignment1.setType(AssignmentType.QUIZ);
+        _assignment2.setType(AssignmentType.HOMEWORK);
+        assertThat(onlineStudent.getGrade(_assignment1)).isEqualTo(72);
+        assertThat(onlineStudent.getGrade(_assignment2)).isEqualTo(82);
 
         // Verify that CSVReader's readData method was called
         verify(csvReader, times(1)).readData();
@@ -91,10 +100,10 @@ class StudentParserTest {
         when(csvReader.readData()).thenReturn(emptyMockData);
 
         // Call the method under test
-        List<Student> students = studentParser.parseStudents(csvReader.readData());
+        var students = studentParser.parseStudents(csvReader.readData());
 
         // Assertions
-        assertTrue(students.isEmpty());
+        assertThat(students.isEmpty()).isTrue();
 
         // Verify that CSVReader's readData method was called
         verify(csvReader, times(1)).readData();
