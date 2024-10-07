@@ -1,5 +1,6 @@
 package org.walsh;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -8,6 +9,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.offset;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -28,11 +31,7 @@ class StudentParserTest {
     @Test
     void parse_students_should_succeed() {
         // Prepare mock data based on the actual CSV structure
-        ArrayList<String[]> mockCsvData = new ArrayList<>();
-        mockCsvData.add(new String[]{"Name", "Type", "Assignment1", "AssignmentType1", "Assignment2", "AssignmentType2", "HoursWorkedPerWeek"});
-        mockCsvData.add(new String[]{"Owen Moore", "FullTime", "99", "EXAM", "84", "QUIZ", ""});
-        mockCsvData.add(new String[]{"David King", "PartTime", "73", "PROJECT", "93", "QUIZ", "11"});
-        mockCsvData.add(new String[]{"Sophia Martinez", "Online", "72", "QUIZ", "82", "HOMEWORK", ""});
+        var mockCsvData = getMockCsvData();
 
         // Set up mock behavior
         when(csvReader.readData()).thenReturn(mockCsvData);
@@ -45,7 +44,7 @@ class StudentParserTest {
 
         // Test FullTime student
         Student fullTimeStudent = students.get(0);
-        assertEquals("Owen Moore", fullTimeStudent.getName());
+        assertThat(fullTimeStudent.getName()).isEqualTo("Owen Moore");
         assertEquals(StudentType.FULLTIME, fullTimeStudent.getStudentType());
         assertEquals(99, fullTimeStudent.getGrade(new Assignment("Assignment1", 100, "2024-09-30", AssignmentType.EXAM)));
         assertEquals(84, fullTimeStudent.getGrade(new Assignment("Assignment2", 100, "2024-09-30", AssignmentType.QUIZ)));
@@ -69,32 +68,24 @@ class StudentParserTest {
 
         // Verify that CSVReader's readData method was called
         verify(csvReader, times(1)).readData();
-
-
     }
 
-    public int add(int a, int b) {
-        return a + b;
-    }
     @Test
     void calculate_average_grade_should_succeed() {
-        // Prepare mock data
-        ArrayList<String[]> mockCsvData = new ArrayList<>();
-        mockCsvData.add(new String[]{"Name", "Type", "Assignment1", "AssignmentType1", "Assignment2", "AssignmentType2", "HoursWorkedPerWeek"});
-        mockCsvData.add(new String[]{"John Doe", "FullTime", "80", "EXAM", "90", "QUIZ", ""});
+        var mockCsvData = getMockCsvData();
 
         when(csvReader.readData()).thenReturn(mockCsvData);
 
-        List<Student> students = studentParser.parseStudents(csvReader.readData());
+        var students = studentParser.parseStudents(csvReader.readData());
         Student student = students.get(0);
 
-        assertEquals(85.0, student.calculateAverageGrade(), 0.01);
+        assertThat(student.calculateAverageGrade()).isCloseTo(91.5, offset(0.01));
     }
 
     @Test
     void parse_students_with_empty_data_should_succeed() {
         // Prepare empty mock data
-        ArrayList<String[]> emptyMockData = new ArrayList<>();
+        var emptyMockData = new ArrayList<String[]>();
 
         // Set up mock behavior
         when(csvReader.readData()).thenReturn(emptyMockData);
@@ -112,7 +103,7 @@ class StudentParserTest {
     @Test
     void parse_students_should_fail() {
         // Prepare mock data with invalid entries
-        ArrayList<String[]> mockCsvData = new ArrayList<>();
+        var mockCsvData = new ArrayList<String[]>();
         mockCsvData.add(new String[]{"Name", "Type", "Assignment1", "AssignmentType1", "Assignment2", "AssignmentType2", "HoursWorkedPerWeek"});
         mockCsvData.add(new String[]{"Invalid Student", "InvalidType", "NotANumber", "EXAM", "90", "QUIZ", ""});
 
@@ -121,5 +112,14 @@ class StudentParserTest {
         // We expect the parser to handle invalid data gracefully
         // This might mean skipping invalid entries or throwing a specific exception
         assertDoesNotThrow(() -> studentParser.parseStudents(csvReader.readData()));
+    }
+
+    private static ArrayList<String[]> getMockCsvData() {
+        ArrayList<String[]> mockCsvData = new ArrayList<>();
+        mockCsvData.add(new String[]{"Name", "Type", "Assignment1", "AssignmentType1", "Assignment2", "AssignmentType2", "HoursWorkedPerWeek"});
+        mockCsvData.add(new String[]{"Owen Moore", "FullTime", "99", "EXAM", "84", "QUIZ", ""});
+        mockCsvData.add(new String[]{"David King", "PartTime", "73", "PROJECT", "93", "QUIZ", "11"});
+        mockCsvData.add(new String[]{"Sophia Martinez", "Online", "72", "QUIZ", "82", "HOMEWORK", ""});
+        return mockCsvData;
     }
 }
